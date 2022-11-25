@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% block content %}
+<div class="container mt-5 col-md-5 " style="float:none;margin:auto;">
+<form action="" id='form-register' class="well form-horizontal"  method='POST'>
+    {% csrf_token %}
+
+<fieldset class="outerDiv_resiter">
+
+<!-- Form Name -->
+<legend class="RegisationOuter"><center><h2><b>Registration Form</b></h2></center></legend><br>
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <p class='alert alert-danger'> {{ error }} </p>
+        {% endfor %}
+    {% endfor %}
+{% endif %} 
+
+<div class="fromGroup_outer">
+  <!-- Text input-->
+  <div class="form-group">
+    <label class="control-label">First Name<span>*</span></label>  
+    <div class="inputGroupContainer">
+    <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    {{ form.first_name }}
+      </div>
+    </div>
+  </div>
+  <!-- Text input-->
+  <div class="form-group">
+    <label class="control-label" >Last Name<span>*</span></label> 
+      <div class="inputGroupContainer">
+      <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    {{ form.last_name }}
+
+      </div>
+    </div>
+  </div>
+  <!-- Text input-->
+  <div class="form-group">
+      <label class="control-label">E-Mail<span>*</span></label>  
+        <div class="inputGroupContainer">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+      {{ form.email }}
+
+        </div>
+      </div>
+    </div>
+
+  <!-- Text input--> 
+  <div class="form-group">
+    <label class="control-label" >Password<span>*</span></label> 
+      <div class="inputGroupContainer">
+      <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    {{ form.password1 }}
+
+      </div>
+    </div>
+  </div>
+  <!-- Text input-->
+  <div class="form-group">
+    <label class="control-label" >Confirm Password<span>*</span></label> 
+      <div class="inputGroupContainer">
+      <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    {{ form.password2 }}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="text-center">
+  <div class="form-group">
+    <label class="control-label"></label>
+    <div class="BtnSubmit_resiter">
+      <button type="submit" class="btn btn-warning" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT <span class="glyphicon glyphicon-send"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+    </div>
+  </div><br>
+  <div class="form-group">
+      <div class="text-center">
+      Already have an account?&nbsp
+      <a href="{% url 'login' %}">Signin</a>
+      <br>Or<br>
+    <a type="submit" class="btn btn-primary text-center resiterAnkr" href="{% provider_login_url 'google'%}">Register With Google</a>
+      </div>
+  </div>
+</div>
+
+</fieldset>
+</div>
+    </div>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 col-md-5 " style="float:none;margin:auto;">
+<form action="{% url 'verify' %}" class="well form-horizontal" method='POST'>
+    <fieldset>
+    <legend><center><h2><b>Verify your Email</b></h2></center></legend><br>
+    {% csrf_token %}
+    <div class="fromGroup_outer">
+      <div class="form-group">
+        <label class="control-label" >Enter Your Otp</label> 
+        <div class=" inputGroupContainer">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input type="text" class='form-control' name="otp" id="otp" placeholder='Enter the OTP Sent to your mail address'>
+          </div>
+          <small id="emailHelp" class="form-text text-muted">Do not share your otp with anyone</small>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="form-group">
+        <label class=" control-label"></label>
+        <div class=" BtnSubmit_resiter">
+          <button type="submit" class="btn btn-warning" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspVerify <span class="glyphicon glyphicon-send"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+        </div>
+        </div>
+      </div>
+    </div>
+    </fieldset>
+</form>
+</div>
+{% endblock %}

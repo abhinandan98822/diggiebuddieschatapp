@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+<form method="get">
+    <div class="row">
+    {{formfilter.form.job_title}}
+    {{formfilter.form.job_type}}
+    {{formfilter.form.skills}}
+    {{formfilter.form.job_category}}<input class="form-control justify-content-center " id="searchsubmit2" type="submit" value="search">
+    </div>
+    
+    
+</form>
+</div> 
+<div class="container">
+<form method="get">
+    <div id="rangetext">
+    Select Range Of Bid Amount
+    </div>
+    <div class="row">
+    {{formfilter.form.datefilter}}
+    <input class="form-control justify-content-center " id="searchsubmit3" type="submit" value="Go">
+    </div>
+</form>
+</div>
+             
+{% if prodo %}
+                    {% for job in prodo  %}
+                  
+                    <div class="latestJob_list">
+                      <div class="latestJob_listImg">
+                        <img src="{{ job.seller.company_logo.url }}" alt="Company logo">
+                      </div>
+                      <div class="latestJob_listhdding">
+                        <h5>{{ seller.company_name }}</h5>
+                        <h2><a href="{% url 'job_detail' job.slug %}">{{ job.job_title }}</a></h2>
+                        <div class="adderessOuter">
+                          <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{ seller.city_of_company }},{{ seller.country_of_company }}</p>
+                          <p><i class="fa fa-clock-o" aria-hidden="true"></i>Deadline {{ job.deadline }}</p>
+                          <p><i class="fa fa-money" aria-hidden="true"></i> {{ job.askamount }}</p>
+                        </div>
+                        <p class="WebTester">{{ job.short_desc }}</p>
+                        <div class="SaveJob">
+                          <p><i class="fa fa-envelope" aria-hidden="true"></i><a href="{% url 'buyerapplyjobform' job.slug %}">Send a Proposal</a></p>
+                          <p><i class="fa fa-envelope" aria-hidden="true"></i>Email Job</p>
+                        </div>
+                      </div>
+    
+                    </div>
+                
+                    {% endfor %}
+                    {% else %}
+                    <div class="container" id="nodata">
+                        <h3>No data found</h3>
+                    </div>
+                    {% endif %}
+
+
+
+
+{% endblock %}

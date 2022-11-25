@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- header css close here -->
+<section class="main_content">
+  <div class="container main_profile_description">
+    <div class="row">
+      <div class="col-lg-6 col-md-4 col-sm-4">
+        <div class="row user_prfile">
+          <a href="#">
+          <div class="col-lg-2 col-md-4">
+            <img src="{{ profile_picture.url }}" alt="">
+          </div>
+          <div class="col-lg-10 col-md-8">
+            <h3>{{user.first_name}} {{user.last_name}}</h3>
+          </div>
+        </a>
+        </div>
+        </div>
+         <div class="col-lg-6 col-md-8 col-sm-8 description_icons">
+         <div class="row">
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               
+               <p><a href="{% url 'chat-index' %}"><i class="fa fa-envelope"></i><em>Messages</em></a> </p>
+             </div>
+           </div>
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               <i class="fa fa-solid fa-eye"></i>
+               <p><a href="#">7000</a> <em>visits</em></p>
+             </div>
+           </div>
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               <i class="fa fa-square-o" aria-hidden="true"></i>
+               <p><a href="#">12</a> <em>Ads</em></p>
+             </div>
+           </div>
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               <i class="fa fa-user"></i>
+               <p><a href="#">18</a> <em>Favorites</em></p>
+             </div>
+           </div>
+         </div>
+      </div>
+      </div>
+    </div>
+
+ <div class="container content_description">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Hello {{user.first_name}} {{user.last_name}}</h3>
+         <div class="accordion profile_details" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                 My details 
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <form action="" id='form-register'  class="justify-content-center"  method='POST' enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {% if messages %}
+    
+                    {% for message in messages %}
+                    <div class="form-group">
+                      <div class="alert alert-success col-md-7 inputGroupContainer text-center" style="float:none; margin:auto;"
+                      role="alert">
+                        {{ message }}
+                      </div>
+                    </div>
+                    {% endfor %}
+                  {% endif %}
+                  <div class="form-group">
+                    <label>Company Name</label>
+                    {{ form.company_name }}
+                    {{ form.company_name.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Company Logo</label>
+                    <img id="sellerimage" src="{{ company_logo.url }}">
+                    {{ form.company_logo }}
+                    {{ form.company_logo.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>City</label>
+                    {{ form.city_of_company }}
+                    {{ form.city_of_company.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Company Email</label>
+                    {{ form.company_email }}
+                    {{ form.company_email.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Company Adress</label>
+                    {{ form.company_address }}
+                    {{ form.company_address.errors }}
+                  </div>
+                 
+                  <div class="form-group">
+                    <label>Country</label>
+                    {{ form.country_of_company }}
+                    {{ form.country_of_company.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Company Mobile Number</label>
+                    {{ form.company_phone_number }}
+                    {{ form.company_phone_number.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Company Description</label>
+                    {{ form.company_desc }}
+                    {{ form.company_desc.errors }}
+                  </div>
+                 
+                  <div class="form-group">
+                    <button type="submit" name="profile_update"  class="update_btn">Update</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                 Settings 
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <form name="password_update" method="post">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" required name="password" value="">
+                      </div>
+                       <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" required name="confirm" value="">
+                      </div>
+                      <div class="form-group">
+                        <button type="submit" name="pwd_up_btn" class="update_btn">Update</button>
+                      </div>
+                    </form>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+               Payments 
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Order id</th>
+                        <th scope="col">Project Name</th>
+                        <th scope="col">User</th>
+                        
+                        <th scope="col">Amount</th>
+                        <th scope="col">Action</th>
+
+    
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for pay in data %}
+                      <tr>
+                        <th scope="row">{{pay.id}}</th>
+                        <td>{{pay.order_id}}</td>
+                        <td>{{pay.job}}</td>
+                        <td>{{pay.bidder}}</td>
+                        <td>{{pay.amount}}</td>
+                        {% if pay.paymentReport %}
+                        <td> Payement Transfer Successfully</td>
+                        {% else %}
+                        <td>Payement Transfer Failed</td>
+                        {% endif %}
+                      </tr>
+                      {% endfor %}
+                     </tbody>
+                  </table>
+                  </div>
+              </div>
+              </div>
+              </div>
+
+
+          
+{% endblock %}

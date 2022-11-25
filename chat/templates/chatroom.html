@@ -1,0 +1,319 @@
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+        <div class="container mt-3 p-5">
+            <h2>django-channels-chat</h2>
+            <div class="row">
+                <div class="col-12 col-md-8">
+                    <div class="mb-2">
+                        <label for="chatLog">Room: #{{ room.name }}</label>
+                        <div class="form-control" id="chatLog">
+                            {% for data in prev_messages %}
+                                {% if 'pm' in data.content %}
+                                {{data.user.first_name }} : {{ data.content }}<br>
+                                {% else %}
+                                {{data.user.first_name }} : {{ data.content }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div>
+                            <input type="file" id="file"  style="display:none;" />
+                            <button id="gallery" onclick="thisFileUpload();"><i class="bi-paperclip" style="font-size:20px"></i>
+                            </button>
+
+                            <input type="emoji" id="emoji"  style="display:none;" />
+                            <button id="camera"><i class="bi bi-emoji-smile"></i>
+                            </button>
+                            
+                        </div>
+                        <input type="text" class="form-control" id="chatMessageInput" placeholder="Enter your chat message">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" id="chatMessageSend" type="button">Send</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="onlineUsers">Online users</label>
+                    <select multiple class="form-control" id="onlineUsersSelector">
+                    </select>
+                </div>
+            </div>
+            {{ room.name|json_script:"roomName" }}
+        </div>
+        <script src="{% static 'mainapp/js/jquery.js' %}"></script>
+        <script src="{% static 'mainapp/js/jquery.min.js' %}"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+       
+        <script src="{% static 'js/room.js' %}"></script>
+       
+    
+{% endblock content %} {% endcomment %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{request.user}}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  background: #C5DDEB;
+  font: 14px/20px "Lato", Arial, sans-serif;
+  padding: 40px 0;
+  color: white;
+}
+
+.container {
+  margin: 0 auto;
+  width: 750px;
+  background: #444753;
+  border-radius: 5px;
+}
+
+.people-list {
+  width: 260px;
+  float: left;
+}
+.people-list .search {
+  padding: 20px;
+}
+.people-list input {
+  border-radius: 3px;
+  border: none;
+  padding: 14px;
+  color: white;
+  background: #6A6C75;
+  width: 90%;
+  font-size: 14px;
+}
+.people-list .fa-search {
+  position: relative;
+  left: -25px;
+}
+.people-list ul {
+  padding: 20px;
+  height: 770px;
+}
+.people-list ul li {
+  padding-bottom: 20px;
+}
+.people-list img {
+  float: left;
+}
+.people-list .about {
+  float: left;
+  margin-top: 8px;
+}
+.people-list .about {
+  padding-left: 8px;
+}
+.people-list .status {
+  color: #92959E;
+}
+
+.chat {
+  width: 490px;
+  float: left;
+  background: #F2F5F8;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: #434651;
+}
+.chat .chat-header {
+  padding: 20px;
+  border-bottom: 2px solid white;
+}
+.chat .chat-header img {
+  float: left;
+}
+.chat .chat-header .chat-about {
+  float: left;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+.chat .chat-header .chat-with {
+  font-weight: bold;
+  font-size: 16px;
+}
+.chat .chat-header .chat-num-messages {
+  color: #92959E;
+}
+.chat .chat-header .fa-star {
+  float: right;
+  color: #D8DADF;
+  font-size: 20px;
+  margin-top: 12px;
+}
+.chat .chat-history {
+  padding: 30px 30px 20px;
+  border-bottom: 2px solid white;
+  overflow-y: scroll;
+  height: 575px;
+}
+.chat .chat-history .message-data {
+  margin-bottom: 15px;
+}
+.chat .chat-history .message-data-time {
+  color: #a8aab1;
+  padding-left: 6px;
+}
+.chat .chat-history .message {
+  color: white;
+  padding: 18px 20px;
+  line-height: 26px;
+  font-size: 16px;
+  border-radius: 7px;
+  margin-bottom: 30px;
+  width: 90%;
+  position: relative;
+}
+.chat .chat-history .message:after {
+  bottom: 100%;
+  left: 7%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #86BB71;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.chat .chat-history .my-message {
+  background: #86BB71;
+}
+.chat .chat-history .other-message {
+  background: #94C2ED;
+}
+.chat .chat-history .other-message:after {
+  border-bottom-color: #94C2ED;
+  left: 93%;
+}
+.chat .chat-message {
+  padding: 30px;
+}
+.chat .chat-message textarea {
+  width: 100%;
+  border: none;
+  padding: 10px 20px;
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  resize: none;
+}
+.chat .chat-message .fa-file-o, .chat .chat-message .fa-file-image-o {
+  font-size: 16px;
+  color: gray;
+  cursor: pointer;
+}
+.chat .chat-message button {
+  float: right;
+  color: #94C2ED;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #F2F5F8;
+}
+.chat .chat-message button:hover {
+  color: #75b1e8;
+}
+
+.online, .offline, .me {
+  margin-right: 3px;
+  font-size: 10px;
+}
+
+.online {
+  color: #86BB71;
+}
+
+.offline {
+  color: #E38968;
+}
+
+.me {
+  color: #94C2ED;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.float-right {
+  float: right;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+
+
+/*  */
+</style>
+
+</head>
+<body>
+  {% if request.user.is_authenticated %}
+    <div class="container clearfix">
+      <div class="people-list" id="people-list">
+        <div class="search">
+          <input type="text" placeholder="search" id="myInput" onkeyup="myFunction()" title="Type in a name" />
+          <i class="fa fa-search"></i>
+        </div>
+        <ul class="list" style="list-style: none;" id="myUL">
+          {% for user in users %}
+          <li class="clearfix" id={{user.username}}>
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />
+            <div class="about">
+              <div class="name"><a href="{% url 'chat-room' username=user.first_name %}" style="text-decoration: none; color:chartreuse;">{{user.first_name}} {{user.last_name}}</a></div>
+              {% if user.is_online %}
+              <div class="status">
+                <i class="fa fa-circle online"></i> online
+              </div> 
+              {% else %}
+              <div class="status">
+                <i class="fa fa-circle online"></i> offline
+              </div> 
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+        
+      </div> <!-- end container -->
+
+      {% else %}
+      <center><h1 style="color: black;"> Hey you need to login first </h1> </center>
+      {% endif %}
+<!-- {{user.id|json_script:"json-username"}}
+{{request.user.username|json_script:"json-message-username"}} -->
+</body>
+<script src="{% static 'js/room.js' %}"></script>
+
+</html> 

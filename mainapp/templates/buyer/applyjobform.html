@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 col-md-9 " style="float:none;margin:auto;">
+<form action="" id='form-register' class="well form-horizontal"  method='POST' enctype="multipart/form-data">
+    {% csrf_token %}
+
+<fieldset>
+
+<!-- Form Name -->
+<legend><center><h2><b>Job Profile</b></h2></center></legend><br>
+
+
+<!-- Text input-->
+<div class="form-group">
+    <h1 class="text-center">&nbsp Job Title : {{applied_job.job_title}}</h1>
+    <br>
+    <h4 class="text-center">&nbsp Job Short Desc : {{applied_job.short_desc}}</h4>
+    <br>
+    <h4 class="text-center">&nbsp Job Full Desc : {{applied_job.full_desc | safe}}</h4>
+    <br>
+    <h4 class="text-center">&nbsp Skills Required:  <h5 class="text-center">{% for skill in skills %} {{skill}},{% endfor %}
+    </h5>
+    </h4>
+    <br>
+    {% comment %} <h3>{{applied_job.job_type}}</h3>
+    <br>
+    <h3>{{applied_job.category_type}}</h3> {% endcomment %}
+    <h5 class="text-center">&nbsp Bidding From : {{applied_job.askamount}} </h5>
+    <br>
+    <br>
+    <div class= "d-flex justify-content-center">{{form.pitch}}</div>
+    <br>
+    <div class= "d-flex justify-content-center">
+        <div>{{form.bidamount}}<div>
+
+        <div>{{form.bidamount.errors}}</div>
+    </div>
+    
+    <br>
+    <div class="text-center"><input  type="submit" value="Submit"></div>
+    
+</div>
+
+</fieldset>
+</div>
+    </div>
+</form>
+</div>
+{% endblock %}

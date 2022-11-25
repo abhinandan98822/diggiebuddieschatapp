@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for notify in notify %}
+
+<div class=" container mt-5 col-md-8 alert alert-block" onclick="location.href='{{notify.cta_link}}'" style="cursor:pointer;{% if notify.notification.unread %}background-color:grey;{% else %}{% endif%}">
+  
+  {% if notify.notification.unread %}
+    <a class="close pull-right" href="notification/markasread/{{notify.notification.slug}}">
+     Mark as read
+    </a>
+  {% else %}
+  {% endif%}
+  <br>
+  <a class="close pull-right" href="notification/delete/{{notify.notification.slug}}">
+    Delete
+   </a>
+    
+    
+    
+    <h4>
+      
+      
+      
+      
+      {{ notify.notification.actor }} 
+      {{ notify.notification.verb }}
+      {% if notify.notification.target %}
+        of {{ notify.notification.target }}
+      {% endif %}
+    </h4>
+    
+    <p>{{ notify.notification.timesince }} ago</p>
+    
+    <p>{{ notify.notification.description|linebreaksbr }}</p>
+  
+    
+  
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load digibuddies_extras %}
+{% block content %}
+<div class="container mt-5 col-md-10 " style="float:none;margin:auto;">
+
+<fieldset>
+
+<!-- Form Name -->
+<legend><center><h2><b>All Jobs</b></h2></center></legend><br>
+
+<!-- Text input-->
+  <div class="form-group" style="background-color:white;">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Sr. No.</th>
+            <th scope="col" class="text-center">Job Information</th>
+            <th scope="col" class="text-center">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for alljobs in applied_job %}
+          
+          <tr >
+            <td class="align-middle">{{forloop.counter}}</td>
+            <td class="align-middle"><div class="latestJob_list">
+              <div class="latestJob_listImg">
+                <img src="{{ alljobs.seller.company_logo.url }}" alt="Company logo">
+              </div>
+              <div class="latestJob_listhdding">
+                <h5>{{ seller.company_name }}</h5>
+                <h2><a href="{% url 'job_detail' alljobs.slug %}">{{ alljobs.job_title }}</a></h2>
+                <div class="adderessOuter">
+                  <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{ alljobs.seller.city_of_company }},{{ alljobs.seller.country_of_company }}</p>
+                  <p><i class="fa fa-clock-o" aria-hidden="true"></i>Deadline {{ alljobs.deadline }}</p>
+                  <p><i class="fa fa-money" aria-hidden="true"></i> {{ alljobs.askamount }}</p>
+                </div>
+                <p class="WebTester">{{ alljobs.short_desc }}</p>
+              </div>
+
+            </div>
+          </td>
+          {% if alljobs.id|appliedbyme:request.user.id %}
+          <td class="align-middle"><a class="btn btn-success" id="applybtn" href="{% url 'proposals' %}">View applied proposals</a></td>          {% else %}
+
+          <td class="align-middle"><a class=" btn btn-primary" id="applybtn" href="/buyer/applyjobform/{{ alljobs.slug}}
+            ">Apply</a></td>
+
+          
+          {% endif %}
+            {% comment %} <td>{{ forloop.counter }} </td>
+            <td><img id="company_logo_for_table" src="{{ alljobs.seller.company_logo.url }}" alt="company_logo"> </td>
+            <td>{{ alljobs.seller }} </td>
+            
+            
+            {% if value == "not applied" %}
+            <td>
+              <a href="{% url 'job_detail' alljobs.slug %}">{{ alljobs.job_title}}<a>
+            </td>
+            <td>{{alljobs.short_desc}}</td>
+              <td><a class="btn btn-primary" href="/buyer/applyjobform/{{ alljobs.slug}}">Apply</a></td>
+            {% elif value == "applied" %}
+            <td>
+              <a href="{% url 'job_detail' alljobs.slug %}">{{ alljobs.job_title}}<a>(applied)
+            </td>
+            <td>{{alljobs.short_desc}}</td> {% endcomment %}
+           
+          
+          </tr>
+          
+          {% endfor %}
+          {% comment %} {% for alljobs,value in applied_job.items %}
+          {% if value == "applied" %}
+          <tr >
+            <td>
+              <a href="{% url 'job_detail' alljobs.id %}">{{ alljobs.job_title}}<a>(applied)
+            </td>
+            <td>{{alljobs.short_desc}}</td>
+            <td><h6></h6><a class="btn btn-success" href="{% url 'proposals' %}">View applied proposals</a></td>
+          </tr>
+          {% endif %}
+          {% endfor %} {% endcomment %}
+          
+         
+          {% comment %} {% for alljobs in exclude_applied_job %}
+          <tr >
+            <td>
+              <a href="{% url 'job_detail' alljobs.id %}">{{ alljobs.job_title}}<a>
+            </td>
+            <td>{{alljobs.short_desc}}</td>
+            <td><a class="btn btn-primary" href="/buyer/applyjobform/{{ alljobs.id }}">View Submitted Proposal</a></td>
+          </tr>
+          {% endfor %} {% endcomment %}
+        </tbody>
+    </table>
+  </div>
+    
+</fieldset>
+</div>
+{% endblock %}

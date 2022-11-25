@@ -1,0 +1,660 @@
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+        <div class="container mt-3 p-5">
+            <h2>django-channels-chat</h2>
+            <div class="row">
+                <div class="col-12 col-md-8">
+                    <div class="mb-2">
+                        <label for="roomInput">Enter a room name to connect to it:</label>
+                        <input type="text" class="form-control" id="roomInput" placeholder="Room name">
+                        <small id="roomInputHelp" class="form-text text-muted">If the room doesn't exist yet, it will be created for you.</small>
+                    </div>
+                    <button type="button" id="roomConnect" class="btn btn-success">Connect</button>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="roomSelect">Active rooms</label>
+                    <select multiple class="form-control" id="roomSelect">
+                        {% for room in rooms %}
+                            <option>{{ room }}</option>
+                        {% endfor %}
+                    </select> 
+                </div>
+            </div>
+        </div>
+        <script src="{% static 'js/index.js' %}"></script>
+{% endblock content %}
+     {% endcomment %}
+
+     {% load static %}
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Chat</title>
+     
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+         <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+         <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+         <style>
+             @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
+     *, *:before, *:after {
+       box-sizing: border-box;
+     }
+     
+     body {
+       background: #C5DDEB;
+       font: 14px/20px "Lato", Arial, sans-serif;
+       padding: 40px 0;
+       color: white;
+     }
+     
+     .container {
+       margin: 0 auto;
+       width: 750px;
+       background: #444753;
+       border-radius: 5px;
+     }
+     
+     .people-list {
+       width: 260px;
+       float: left;
+     }
+     .people-list .search {
+       padding: 20px;
+     }
+     .people-list input {
+       border-radius: 3px;
+       border: none;
+       padding: 14px;
+       color: white;
+       background: #6A6C75;
+       width: 90%;
+       font-size: 14px;
+     }
+     .people-list .fa-search {
+       position: relative;
+       left: -25px;
+     }
+     .people-list ul {
+       padding: 20px;
+       height: 770px;
+     }
+     .people-list ul li {
+       padding-bottom: 20px;
+     }
+     .people-list img {
+       float: left;
+     }
+     .people-list .about {
+       float: left;
+       margin-top: 8px;
+     }
+     .people-list .about {
+       padding-left: 8px;
+     }
+     .people-list .status {
+       color: #92959E;
+     }
+     
+     .chat {
+       width: 490px;
+       float: left;
+       background: #F2F5F8;
+       border-top-right-radius: 5px;
+       border-bottom-right-radius: 5px;
+       color: #434651;
+     }
+     .chat .chat-header {
+       padding: 20px;
+       border-bottom: 2px solid white;
+     }
+     .chat .chat-header img {
+       float: left;
+     }
+     .chat .chat-header .chat-about {
+       float: left;
+       padding-left: 10px;
+       margin-top: 6px;
+     }
+     .chat .chat-header .chat-with {
+       font-weight: bold;
+       font-size: 16px;
+     }
+     .chat .chat-header .chat-num-messages {
+       color: #92959E;
+     }
+     .chat .chat-header .fa-star {
+       float: right;
+       color: #D8DADF;
+       font-size: 20px;
+       margin-top: 12px;
+     }
+     .chat .chat-history {
+       padding: 30px 30px 20px;
+       border-bottom: 2px solid white;
+       overflow-y: scroll;
+       height: 575px;
+     }
+     .chat .chat-history .message-data {
+       margin-bottom: 15px;
+     }
+     .chat .chat-history .message-data-time {
+       color: #a8aab1;
+       padding-left: 6px;
+     }
+     .chat .chat-history .message {
+       color: white;
+       padding: 18px 20px;
+       line-height: 26px;
+       font-size: 16px;
+       border-radius: 7px;
+       margin-bottom: 30px;
+       width: 90%;
+       position: relative;
+     }
+     .chat .chat-history .message:after {
+       bottom: 100%;
+       left: 7%;
+       border: solid transparent;
+       content: " ";
+       height: 0;
+       width: 0;
+       position: absolute;
+       pointer-events: none;
+       border-bottom-color: #86BB71;
+       border-width: 10px;
+       margin-left: -10px;
+     }
+     .chat .chat-history .my-message {
+       background: #86BB71;
+     }
+     .chat .chat-history .other-message {
+       background: #94C2ED;
+     }
+     .chat .chat-history .other-message:after {
+       border-bottom-color: #94C2ED;
+       left: 93%;
+     }
+     .chat .chat-message {
+       padding: 30px;
+     }
+     .chat .chat-message textarea {
+       width: 100%;
+       border: none;
+       padding: 10px 20px;
+       font: 14px/22px "Lato", Arial, sans-serif;
+       margin-bottom: 10px;
+       border-radius: 5px;
+       resize: none;
+     }
+     .chat .chat-message .fa-file-o, .chat .chat-message .fa-file-image-o {
+       font-size: 16px;
+       color: gray;
+       cursor: pointer;
+     }
+     .chat .chat-message button {
+       float: right;
+       color: #94C2ED;
+       font-size: 16px;
+       text-transform: uppercase;
+       border: none;
+       cursor: pointer;
+       font-weight: bold;
+       background: #F2F5F8;
+     }
+     .chat .chat-message button:hover {
+       color: #75b1e8;
+     }
+     
+     .online, .offline, .me {
+       margin-right: 3px;
+       font-size: 10px;
+     }
+     
+     .online {
+       color: #86BB71;
+     }
+     
+     .offline {
+       color: #E38968;
+     }
+     
+     .me {
+       color: #94C2ED;
+     }
+     
+     .align-left {
+       text-align: left;
+     }
+     
+     .align-right {
+       text-align: right;
+     }
+     
+     .float-right {
+       float: right;
+     }
+     
+     .clearfix:after {
+       visibility: hidden;
+       display: block;
+       font-size: 0;
+       content: " ";
+       clear: both;
+       height: 0;
+     }
+     
+     
+     
+     /*  */
+     </style>
+     
+     </head>
+     <body>
+          <div class="container clearfix">
+              <div class="people-list" id="people-list">
+                <div class="search">
+                  <input type="text" placeholder="search" id="myInput" onkeyup="myFunction()" title="Type in a name" />
+                  <i class="fa fa-search"></i>
+                </div>
+                <ul class="list" style="list-style: none;" id="myUL">
+                  {% for user in users %}
+                  <li class="clearfix" id={{user.username}}>
+                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />
+                    <div class="about">
+                      <div class="name"><a href="{% url 'chat-room' username=user.first_name %}" style="text-decoration: none; color:chartreuse;">{{user.first_name}} {{user.last_name}}</a></div>
+                      {% if user.is_online %}
+                   <div class="status">
+                     <i class="fa fa-circle online"></i> online
+                   </div> 
+                   {% else %}
+                   <div class="status">
+                     <i class="fa fa-circle online"></i> offline
+                   </div> 
+                   {% endif %}
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+          
+              
+          
+              <div class="chat">
+                <div class="chat-header clearfix">
+                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
+            
+                  <div class="chat-about">
+                    <div class="chat-with">Chat with {{username.first_name}}</div>
+                    <div class="chat-num-messages">already {{count}} messages</div>
+                    {% if username.is_online %}
+                   <div class="status">
+                     <i class="fa fa-circle online"></i> online
+                   </div> 
+                   {% else %}
+                   <div class="status">
+                     <i class="fa fa-circle online"></i> offline
+                   </div> 
+                   {% endif %}
+                  </div>
+                  <i class="fa fa-star"></i>
+                </div> <!-- end chat-header -->
+                
+                <div class="chat-history">
+                  <ul id="chat-body" style="list-style: none;">
+                  {% for message in messages %}
+                  {% if message.sender == user %}
+                     <li class="clearfix">
+                      <div class="message-data align-right">
+                        <span class="message-data-time">{{message.timestamp|timesince}}</span> &nbsp; &nbsp;
+                        <span class="message-data-name">{{request.user.first_name}}</span> <i class="fa fa-circle me"></i>
+                        {% comment %} <img src = "{{ message. }}"  width="250" height="250"> {% endcomment %}
+            
+                      </div>
+                      {% if message.file_type == 'image' %}
+     
+                      <div class="message other-message float-right">
+                       <a href="{{message.message}}" target="_blank"><img src ="{{message.message}}" width="250" height="250"></a>
+                         
+                      </div>
+                      {% elif message.file_type == 'text' %}
+                      <div class="message other-message float-right">
+                       {{message.message}}
+                       </div>
+                       {% elif message.file_type == 'video' %}
+                       <div class="message other-message float-right">
+                       <video width="320" height="240" controls>
+                         <source src="{{message.message}}" type="video/mp4">
+                       </video>
+                     </div>
+                     {% elif message.file_type == 'others' %}
+                     <div class="message other-message float-right">
+                       <a href="{{message.message}}" target="_blank">{{message.message|cut:"http://127.0.0.1:8000/media/messagefiles/"}}</a>
+                     </div>
+                       {% endif %}
+                    </li>
+                    {% else %}
+                    <li>
+                      <div class="message-data">
+                        <span class="message-data-name"><i class="fa fa-circle online"></i> {{username}}</span>
+                        <span class="message-data-time">{{message.timestamp|timesince}}</span>
+                        
+                      </div>
+                      {% if message.file_type == 'image' %}
+                      <div class="message my-message">
+                       <a href="{{message.message}}" target="_blank"><img src ="{{message.message}}" width="250" height="250"></a>
+                      </div>
+                      {% elif message.file_type == 'text' %}
+                      <div class="message my-message">
+                       {{message.message}}
+                     </div>
+                     {% elif message.file_type == 'video' %}
+                     <div class="message my-message">
+                       <video width="320" height="240" controls>
+                         <source src="{{message.message}}" type="video/mp4">
+                       </video>
+                     </div>
+                     {% elif message.file_type == 'others' %}
+                     <div class="message my-message">
+                       <a href="{{message.message}}" target="_blank">{{message.message|cut:"http://127.0.0.1:8000/media/messagefiles/"}}</a>
+                     </div>
+                      {% endif %}
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                  </ul>
+                </div> <!-- end chat-history -->
+                <form action="" method='post' enctype="multipart/form-data">
+                     {% csrf_token %}
+                     <div id="msg"></div>
+                     <input type="file" name="file_upload" id="fileupload" />
+                     <input type="button" value="Upload" id="btnn">
+                </form>
+                <div class="chat-message clearfix">
+                  <textarea name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3"></textarea>
+            
+                  <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-file-image-o"></i>
+                  
+                  <button id="chat-message-submit">Send</button>
+            
+                </div> <!-- end chat-message -->
+            
+              </div> <!-- end chat -->
+              
+            
+            </div> <!-- end container -->
+     
+            
+          
+          
+            {{user|json_script:"json-username"}}
+          {{request.user.id|json_script:"json-message-username"}}
+     
+          
+         </body>
+     
+         
+          
+          <script>
+     
+     
+     
+     $(".chat-history").stop().animate({ scrollTop: $(".chat-history")[0].scrollHeight}, 1000);
+     
+     const reciever_id = JSON.parse(document.getElementById('json-username').textContent);
+     const send_id = JSON.parse(document.getElementById('json-message-username').textContent);
+     console.log(send_id, reciever_id)
+     let socket = null;
+     try{
+         socket = new WebSocket('ws://' + window.location.host + '/ws/' + reciever_id + '/');
+     
+     
+         socket.onopen = function(e){
+             console.log("CONNECTION ESTABLISHED", 'ws://'+window.location.host+'/ws/'+reciever_id+'/');
+         }
+     
+         socket.onclose = function(e){
+             console.log("CONNECTION LOST", 'ws://'+window.location.host+'/ws/'+reciever_id+'/');
+         }
+     
+         socket.onerror = function(e){
+             console.log("ERROR OCCURED", 'ws://'+window.location.host+'/ws/'+reciever_id+'/');
+         }
+     }
+     catch{
+         socket = new WebSocket('wss://' + window.location.host + '/wss/' + reciever_id + '/');
+     
+     
+         socket.onopen = function(e){
+             console.log("CONNECTION ESTABLISHED", 'wss://'+window.location.host+'/wss/'+reciever_id+'/');
+         }
+     
+         socket.onclose = function(e){
+             console.log("CONNECTION LOST", 'wss://'+window.location.host+'/wss/'+reciever_id+'/');
+         }
+     
+         socket.onerror = function(e){
+             console.log("ERROR OCCURED", 'wss://'+window.location.host+'/wss/'+reciever_id+'/');
+     }
+     }
+     
+     
+     socket.onmessage = function(e){
+         console.log(e.data.message)
+         const data = JSON.parse(e.data);
+         var today= new Date();
+         time_since = timeSince(today);
+         if (data.file_type == 'image'){
+           var mymsg = `<a href="${data.message}" target="_blank"><image src=" ${data.message}" width="280px"></a>`
+         }
+         else if (data.file_type == 'text'){
+           var mymsg = `${data.message}`
+         }
+         else if (data.file_type == 'video'){
+           var mymsg = `<video width="320" height="240" controls>
+             <source src="${data.message}" type="video/mp4">
+           </video>`
+         }
+         else if (data.file_type == 'others'){
+           var mymsg =`<a href="${data.message}" target="_blank">${data.message.slice(41,)}</a>`
+         }
+         else{
+             var mymsg = `${data.message}`
+         }
+         if(data.user_id == reciever_id){
+             document.querySelector('#chat-body').innerHTML += 
+                                                                 `  <li class="clearfix">
+                                                                     <div class="message-data align-right">
+                                                                       <span class="message-data-time">${time_since}</span> &nbsp; &nbsp;                                                      
+                                                                     </div>
+                                                                     <div class="message other-message float-right">` + mymsg +`
+                                                                       
+                                                                       </div>
+                                                                   </li>`
+         }else{
+             document.querySelector('#chat-body').innerHTML += 
+                                                                 ` <li>
+                                                                     <div class="message-data">
+                                                                        <span class="message-data-time">${time_since}</span>
+                                                                     </div>
+                                                                     <div class="message my-message">
+                                                                       ` + mymsg +`
+                                                                       
+                                                                       </div>
+                                                                   
+                                                                   </li>`
+         $(".chat-history").stop().animate({ scrollTop: $(".chat-history")[0].scrollHeight}, 1000);
+         }
+     
+     
+         
+     }
+     
+     
+     
+     document.querySelector('#message-to-send').focus();
+     document.querySelector('#message-to-send').onkeyup = function(e) {
+         if (e.keyCode === 13) {  // enter, return
+             document.querySelector('#chat-message-submit').click();
+         }
+     };
+     
+     
+     
+     
+     document.querySelector('#chat-message-submit').onclick = function(e){
+         const message_input = document.querySelector('#message-to-send');
+         const message = message_input.value;
+         console.log("This is the message ", message_input.value);
+         if (message.trim() != ''){
+         socket.send(JSON.stringify({
+             'message':message,
+             'username':reciever_id,
+             'file_type' : 'text'
+         }));
+         }
+         else{
+         }
+         console.log({
+             'message':message,
+             'username':reciever_id
+         });
+         message_input.value = '';
+     }
+     
+     
+     $("#chat-message-submit").click(function() {
+         $(".chat-history").stop().animate({ scrollTop: $(".chat-history")[0].scrollHeight}, 1000);
+     });
+     
+     $("#btnn").click(function() {
+       $(".chat-history").stop().animate({ scrollTop: $(".chat-history")[0].scrollHeight}, 1000);
+     });
+     
+     
+     
+     
+     
+     function myFunction() {
+         var input, filter, ul, li, a, i, txtValue;
+         input = document.getElementById("myInput");
+         filter = input.value.toUpperCase();
+         ul = document.getElementById("myUL");
+         li = ul.getElementsByTagName("li");
+         for (i = 0; i < li.length; i++) {
+             a = li[i].getElementsByTagName("a")[0];
+             txtValue = a.textContent || a.innerText;
+             if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                 li[i].style.display = "";
+             } else {
+                 li[i].style.display = "none";
+             }
+         }
+       }
+       
+     
+     function sendimg(url){
+       alert(url);
+     }
+     function timeSince(date) {
+     
+     var seconds = Math.floor((new Date() - date) / 1000);
+     
+     var interval = seconds / 31536000;
+     
+     if (interval > 1) {
+         return Math.floor(interval) + " years";
+     }
+     interval = seconds / 2592000;
+     if (interval > 1) {
+         return Math.floor(interval) + " months";
+     }
+     interval = seconds / 86400;
+     if (interval > 1) {
+         return Math.floor(interval) + " days";
+     }
+     interval = seconds / 3600;
+     if (interval > 1) {
+         return Math.floor(interval) + " hours";
+     }
+     interval = seconds / 60;
+     if (interval > 1) {
+         return Math.floor(interval) + " minutes";
+     }
+     return Math.floor(seconds) + " seconds";
+     }
+      
+     $("#btnn").click(function(){
+               var form_data = new FormData()
+               var ins = document.getElementById('fileupload').files.length;
+               
+               if (ins == 0){
+                 $("#msg").html('<div class="alert alert-danger" role="alert">Select at least one file</div>');
+                 return;
+               }
+     
+               for(var x = 0; x < ins; x++){
+                 form_data.append('files[]',document.getElementById('fileupload').files[x]);
+               }
+     
+               csrf_token = $("input[name=csrfmiddlewaretoken").val();
+               form_data.append('csrfmiddlewaretoken',csrf_token);
+               console.log(form_data);
+     
+               $.ajax({
+                 url:"",
+                 cache : false,
+                 dataType: 'json',
+                 contentType : false,
+                 processData : false,
+                 type : 'POST',
+                 data : form_data,
+     
+                 success:function(response){
+                   //$("#msg").html(response.msg);
+                   console.log(response.url)
+                   let hostname = window.location.origin;
+                   console.log(hostname + response.url)
+                   let imgurl= hostname + response.url
+                   if (response.msgtype == 'image'){
+                     var msgtype = 'image';
+                   }
+                   else if (response.msgtype == 'video')
+                   {
+                     var msgtype = 'video';
+                   }
+                   else if (response.msgtype == 'others')
+                   {
+                     var msgtype = 'others';
+                   }
+                   
+                   socket.send(JSON.stringify({
+                     'message':imgurl,
+                     'username':reciever_id,
+                     'file_type':msgtype
+                 }));
+              
+     
+                 },
+                 error: function(response){
+                   $("#msg").html(response.message);
+     
+                 }
+               })
+               document.getElementById("fileupload").value = "";
+     
+     
+               
+     
+     
+             })
+             
+         
+          </script>
+          </html> 

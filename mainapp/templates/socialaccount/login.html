@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<body onload="document.forms['google_login'].submit()">
+
+
+ <form method="post" name= "google_login">
+  {% csrf_token %}
+  <button type="submit" class="invisible"></button>
+</form>
+
+{% endblock %}

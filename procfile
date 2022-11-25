@@ -1,0 +1,1 @@
+web: gunicorn digibuddies.wsgi application --log-file -

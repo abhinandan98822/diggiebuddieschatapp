@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 col-md-9 " style="float:none;margin:auto;">
+
+<fieldset>
+
+<!-- Form Name -->
+<legend><center><h2><b>All Proposed Jobs</b></h2></center></legend><br>
+
+<!-- Text input-->
+  <div class="form-group" style="background-color:white;">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Sr. No.</th>
+            <th scope="col">Job Title</th>
+            <th scope="col">MyBid</th>
+            <th scope="col">Action</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job,bid in applied_by_user.items %}
+          <tr >
+            <td>{{forloop.counter}}</td>
+            <td>
+              <a href="{% url 'job_detail' job.slug %}">{{ job.job_title}}<a>
+            </td>
+            <td>{{ bid.bidamount }}</td>
+            {% if job in accepted_jobs %}
+            <td>
+
+            </td>
+            <td>
+              <a class="btn btn-success" href="#">Accpeted<a>
+
+            </td>
+            {% else %}
+            <td>
+              <a class="btn btn-primary" href="{% url 'bid_job_update_form' bid.id job.slug %}">Edit Your Bid<a>
+
+            </td>
+            <td>
+              <a class="btn btn-primary" href="#">Not Accpeted<a>
+
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+    
+</fieldset>
+</div>
+{% endblock %}

@@ -1,0 +1,207 @@
+{% load static %}
+
+{% load digibuddies_extras %}
+{% load notifications_tags %}
+{% load webpush_notifications %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="421317074779-asalctbdbdse8ea6qceqf9jkd0e3etj9.apps.googleusercontent.com">
+    {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">  {% endcomment %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrapValidator.min.css' %}"> 
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'mainapp/css/style.css' %}">
+    <!-- font awsome -->
+    <script src="https://use.fontawesome.com/b197abb434.js"></script>
+    {% webpush_header %}
+
+    <title>DigiBuddies</title>
+</head>
+<body>
+    {% include 'header.html'%}
+    
+    {% block content %}
+    {% endblock %}
+    <section>
+        <div class="careerService">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="careerService">
+                  <h2>If you have any questions, comments or Concerns, please call Career Services at
+                    (000) 555-5555</h2>
+                    <div class="careerService_btn">
+                      <a href="#"> <i class="fa fa-mobile" aria-hidden="true"></i> Call Now: <span>(000)555-5555</span></a>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    <footer>
+        <div class="footerOuter">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="footer_Leftsec">
+                  <ul>
+                    <li><a href="#">HOME</a></li>
+                    
+                    <li><a href="#">ABOUT US</a></li>
+                    <li><a href="#">TEAMS AND CONDITIONS</a></li>
+                    <li><a href="#">PRIVACY POLICY</a></li>
+                    <li><a href="#">CONTACT US</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    {% webpush_button with_class="btn btn-outline-info" %}
+                  {% comment %} </p>
+                  <div class="notification-panel p05 shadow-box" id="notifications">
+                  <div class="row">
+                  <div class="col-6 font-weight-400 ">
+                              Notifications
+                          </div>
+                  <div class="col-6 small">
+                              <a class="float-right underline" onclick="markAllNotinficationsRead()"> Mark all as read</a>
+                          </div>
+                  <table id="notifications-table" class="table left">
+                  </table></div>
+                  <p>    <span class="float-right underline small"
+                          onclick="(function(){var x = document.getElementById('notifications'); x.style.display = 'none'; return false;})();return false;">Close</span>
+                  </div>
+                  <p> {% endcomment %}
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="footer_Rightsec">
+                  <p>@ 2022 Digibuddies</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    <script src="{% static 'mainapp/js/jquery.js' %}"></script>
+    <script src="{% static 'mainapp/js/jquery.min.js' %}"></script>
+    <script src="{% static 'mainapp/js/popper.js' %}"></script>
+    <script src="{% static 'mainapp/js/bootstrap.js' %}"></script>
+    <script src="{% static 'mainapp/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'mainapp/js/bootstrapvalidator.min.js' %}"></script>
+    <script src="{% static 'mainapp/js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+    <script type="text/javascript" src="{% static '/js/chat.js' %}"></script>
+{% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
+
+    {% comment %} {% include 'mainapp/ajax.html' %} {% endcomment %}
+</body>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+function pamyme(id,job_id,job_amount,bidder_id)
+    {
+      url = '/paymentfetch/'+ id
+      fetch(url)
+  .then((response) => response.json())
+  .then((data) => blaablaa(bidder_id,data.id,data.amount,job_id,job_amount)
+  );
+    }
+  function blaablaa(id,pay_id,pay_amount,job_id,job_amount){
+    
+    var options = {
+      "key": "rzp_test_UILOF6uMASGlV8", // Enter the Key ID generated from the Dashboard
+      "amount": pay_amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+      "name": "DigiBuddies",
+      "description": "Test Transaction",
+      "image": "https://example.com/your_logo",
+      "order_id": pay_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler": function (response) {
+        
+        
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature);
+        // window.location.href = `http://127.0.0.1:8000/success/?order_id=response.razorpay_oder_id`
+        console.log(details)
+        var csrf = $("input[name=csrfmiddlewaretoken").val()
+        var details = {"check":"success","order_id":response.razorpay_order_id,"payement_id":response.razorpay_payment_id,"signarture_id":response.razorpay_signature,"csrfmiddlewaretoken":csrf,"amount":job_amount,'job':job_id,'bidder':id}
+        $.ajax({
+          type: "POST",
+          url: "{% url 'successd' %}",
+          data : details,
+  
+          success: function(data){
+            console.log(data);
+            location.href="{% url 'successd' %}"
+            
+          }
+        })
+        
+      },
+      "prefill": {
+        "name": " {{ data.bidder }} ",
+        "email": "rishi@gmail.com",
+        "contact": "9815904330"
+      },
+      "notes": {
+        "address": "Razorpay Corporate Office"
+      },
+      "theme": {
+        "color": "#3399cc"
+      }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response) {
+      // alert(response.error.code);
+      // alert(response.error.description);
+      // alert(response.error.source);
+      // alert(response.error.step);
+      // alert(response.error.reason);
+      // alert(response.error.metadata.order_id);
+      // alert(response.error.metadata.payment_id);
+  
+  
+      var csrf = $("input[name=csrfmiddlewaretoken").val()
+        var details = {"check":"failed","order_id":response.razorpay_order_id,"payement_id":response.razorpay_payment_id,"signarture_id":response.razorpay_signature,"csrfmiddlewaretoken":csrf,"amount":job_amount,'job':job_id,'bidder':id}
+        $.ajax({
+          type: "POST",
+          url: "{% url 'successd' %}",
+          data : details,
+  
+          success: function(data){
+            console.log(data);
+            location.href="{% url 'error' %}"
+            
+          }
+        })
+  
+  
+  
+  
+  
+  
+  
+    });
+
+    rzp1.open();
+      e.preventDefault();
+
+     }
+  
+
+
+</script>
+
+</html>

@@ -1,0 +1,146 @@
+{% load static %}
+{% load notifications_tags %}
+
+
+
+{% comment %} <header>
+<div class="headerNavbar">
+  <div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light header_navbar">
+    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'mainapp/images/logo.png' %}" alt="Headerlogo" class="headerLogo"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+          {% if is_seller %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'sellerpostjob' %}">Sell Service</a>
+         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'listjobs' %}">Services Created</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'seller_update_form' %}">Update your Profile</a>
+      </li>
+        {% elif is_buyer %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'buyerapplyjob' %}">Browse Jobs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'proposals' %}">Proposed Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'buyer_update_form' %}">Update your Profile</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'selleradd' %}">Be a Seller</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'buyeradd' %}">Be a Buyer</a>
+        </li>
+        
+        {% endif %}
+      </ul>
+        <ul class="navbar-nav mr-auto mb-2 mb-lg-0 login_sign">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+            </li>
+          {% endif %}
+          </ul>
+
+        <form class="d-flex PostJob_outer">
+          {% if is_seller %}
+          <a href="#" class="btn post_job_btn" type="submit">Post a job</a>
+          {% endif %}
+        </form>
+    </div>
+  </nav>
+</div>
+</div>
+</header> {% endcomment %}
+<div class="headerNavbar">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light header_navbar">
+        <a class="navbar-brand " style="color:red;font-size:45px;" href="{% url 'index' %}"><!--img src="{% static 'mainapp/images/logo.png' %}" alt="Headerlogo" class="headerLogo"-->Digi<span style="color:blue;">Buddies</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if request.user.is_buyer %}
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'buyerapplyjob' %}">Buy a Service</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'proposals' %}">Proposed Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile_update' %}"> Your Profile Description</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'buyerapplyjob' %}">Browse Jobs</a>
+            </li>
+            {% elif request.user.is_seller %}
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'sellerpostjob' %}">Sell Service</a>
+           </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'listjobs' %}">Services Created</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'seller_update' %}"> Your Profile Description</a>
+          </li>
+          
+            {% endif %}
+          </ul>
+           {% comment %} <ul class="navbar-nav mr-auto mb-2 mb-lg-0 login_sign">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Sign Up</a>
+            </li>
+          </ul> {% endcomment %}
+          <ul class="navbar-nav mr-auto mb-2 mb-lg-0 login_sign">
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'notifications' %}"> Notifications ({% live_notify_badge %})
+                  {% comment %} {% notifications_unread as unread_count %}
+                  {% if unread_count %}
+                      ({{ unread_count }})
+                  {% endif %}</a> {% endcomment %}
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{% url 'logout' %}">logout</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+              </li>
+            {% endif %}
+            </ul>
+          {% if request.user.is_buyer %}
+          
+            <a href="{% url 'buyerapplyjob' %}" class="btn post_job_btn" >Apply a job</a>
+          {% elif request.user.is_seller %}
+            <a href="{% url 'sellerpostjob' %}" class="btn post_job_btn" >Post a job</a>
+            
+          {% endif %}
+
+         
+    </nav>
+  </div>
+</div>
+</header>
+
+
+
+

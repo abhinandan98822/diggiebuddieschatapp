@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mt-5 col-md-8 " style="float:none;margin:auto;">
+    <fieldset>
+
+        <!-- Form Name -->
+    <legend><center><h2><b>All Jobs Posted By you</b></h2></center></legend><br>
+        
+        <!-- Text input-->
+    <div class="form-group" style="background-color:white;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Sr. No.</th>
+                    <th scope="col">Jobs Posted By You</th>
+                    <th scope="col">Actions</th>
+                    <th scope="col">Proposals</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for job,bid in bid_dict.items %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ job.job_title }}</td>
+                            <td><a  class="btn btn-success" href="{% url 'seller_job_update_form' job.slug %}">Edit</a>
+                            <a  class="btn btn-danger" href="{% url 'delete_job' job.slug %}">Delete</a>
+                            </td>
+                            <td><a  class="btn btn-primary" href="{% url 'job_detail' job.slug %}">View Proposals</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+    </fieldset>
+</div>
+
+{% endblock %}

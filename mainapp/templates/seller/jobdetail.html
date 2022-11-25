@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_seller %}
+<div class="container text-center">
+    <h1> <b>Job Title</b>  :-   {{ posted_job.job_title }}</h1>
+    <b>Job Short Description</b>  :-     {{ posted_job.short_desc }}<br>
+    <b>Job Full Description</b>  :-   {{ posted_job.full_desc|safe }}
+    <b>Asked amount</b> :- {{ posted_job.askamount}}<br>
+    <b>Deadline Set by you</b> :- {{ posted_job.deadline }}<br>
+</div>
+<div class="mt-5 col-md-8 " style="float:none;margin:auto;">
+    {% csrf_token %}
+
+    <fieldset>
+
+    <!-- Form Name -->
+    <legend><center><h2><b> Bids</b></h2></center></legend><br>
+    
+    <!-- Text input-->
+    <div class="form-group" style="background-color:white;">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th scope="col">Sr. No.</th>
+                    <th scope="col">Bid Amount</th>
+                    <th scope="col">Freelancer Username</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Action</th>
+                    <th>Payment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in bid_details %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ data.bid_amount }}</td>
+                        <td><a href="{% url 'buyerdetails' data.bidder.id %}">{{ data.bidder }}</a></td>
+                        
+                        <td>{{ data.pitch }}</td>
+                        {% if data.is_accepted %}
+                        <td><a  class="btn btn-success" href="#">Accepted</a></td>
+                        <td><button class="btn btn-success"   onclick="pamyme('{{data.id}}','{{data.job.id}}','{{data.bid_amount}}','{{data.bidder.id}}')">Pay</button></td>
+                        {% else %}
+                        <td><a  class="btn btn-primary" href="{% url 'acceptprop' data.id%}">Accept Proposal</a></td>
+                        
+
+                        {% endif %}
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% comment %} {% for data in bid_details %}
+        {{ data.bid_amount }}&nbsp By &nbsp<a href="{% url 'buyerdetails' data.bidder.id %}">{{ data.bidder }}</a><br>
+    {% endfor %} {% endcomment %}
+    </div>
+</div>
+{% elif user.is_buyer %}
+<div class="container text-center">
+    <h1> <b>Job Title </b>   :-    {{ posted_job.job_title }}</h1>
+    <b>Job Short Description  </b> :-     {{ posted_job.short_desc }}<br>
+    <b>Job Full Description</b>   :-  {{ posted_job.full_desc|safe }}
+    <b>Asked amount</b> :- {{ posted_job.askamount}}<br>
+    <b>Deadline </b> :- {{ posted_job.deadline }}<br>
+</div>
+{% endif %}
+
+
+{% endblock %}

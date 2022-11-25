@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_buyer %}
+<section class="banner_section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        
+        <h2>Find the right job</h2>
+        <p>Find the latest jobs available in your area.</p>   
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="form-group has-search">
+            <i class="fa-solid fa-location-dot"></i>
+            <input type="text" class="form-control" placeholder="Search">
+            <div class="bannerForm_btn">
+              <button><i class="fa fa-search" aria-hidden="true"></i>FIND JOBS</button>
+            </div>
+          </div>
+          <div class="uploadCv">
+            <p><i class="fa fa-file-o" aria-hidden="true"></i>Upload your CV and easily apply to jobs from any device!</p>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% elif user.is_seller %}
+
+{% else %}
+<section class="banner_section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        
+        <h2>Digibuddies</h2>
+        <p>A perfect place for Buying and Selling services</p>   
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="form-group has-search">
+            <div class="bannerForm_btn">
+              <button><i class="fa fa-user" aria-hidden="true"></i>
+                <a href="{% url 'register' %}" style="text-decoration:none; color:#fff;">Get Started</a></button>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+ <!--Banner Section-->
+   
+    <!----Banner Section----->
+
+    <!-- featured start here -->
+    {% if user.is_authenticated %}
+      {% if user.is_buyer %}
+        <section>
+        <div class="featuredOuter">
+          <div class="container">
+            
+            <div class="featuredOuter_div">
+              <div class="companiesOuter">
+                <div class="companiesLeftsec">
+                  <h2>FEATURED <span>COMPANIES</span></h2>
+                </div>
+                <div class="companiesrightsec">
+                  <p>SEE ALL COMPANIES<i class="fa fa-bars" aria-hidden="true"></i></p>
+                </div>
+              </div>
+              {% endif %}          
+              {% if profile_type == "buyer" %}
+              <div class="row featureRow_outer">
+                {% for data in sellers %}
+                <div class="col-md-2">
+                  <div class="feature_img">
+                    <img id="logo_to_buyer" src="{{ data.company_logo.url }}" alt="img">
+                    <h6><span>{{data.company_name}}</span> </h6>
+                  </div>
+                </div>
+                {% endfor %}
+                
+              </div>
+              {% endif %}
+            </div>
+  
+            {% if profile_type == "buyer" %}
+            <div class="latestJob"> 
+              
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="latestJob_leftSec">
+                    <div class="companiesOuter latestJobs">
+                      <div class="companiesLeftsec">
+                        <h2>LATEST<span>JOBS</span></h2>
+                      </div>
+                      <div class="companiesrightsec">
+                        <p>VIEW MORE<i class="fa fa-bars" aria-hidden="true"></i></p>
+                      </div>
+                    </div>
+                    
+                   {% for seller,jobs in exclude_applied_job_dict.items %}
+                    {% for job in jobs  %}
+                    <div class="latestJob_list">
+                      <div class="latestJob_listImg">
+                        <img src="{{ seller.company_logo.url }}" alt="Company logo">
+                      </div>
+                      <div class="latestJob_listhdding">
+                        <h5>{{ seller.company_name }}</h5>
+                        <h2><a href="{% url 'job_detail' job.slug %}">{{ job.job_title }}</a></h2>
+                        <div class="adderessOuter">
+                          <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{ seller.city_of_company }},{{ seller.country_of_company }}</p>
+                          <p><i class="fa fa-clock-o" aria-hidden="true"></i>Deadline {{ job.deadline }}</p>
+                          <p><i class="fa fa-money" aria-hidden="true"></i> {{ job.askamount }}</p>
+                        </div>
+                        <p class="WebTester">{{ job.short_desc }}</p>
+                        <div class="SaveJob">
+                          <p><i class="fa fa-envelope" aria-hidden="true"></i><a href="{% url 'buyerapplyjobform' job.id %}">Send a Proposal</a></p>
+                          <p><i class="fa fa-envelope" aria-hidden="true"></i>Email Job</p>
+                        </div>
+                      </div>
+    
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+    
+                     
+  
+                    <div class="jobList_btn">
+                      <a href="#">VIEW ALL JOBS</a>
+                    </div>
+    
+                  </div>
+                </div>
+                {% endif %}
+
+                {% if profile_type == "buyer" %}
+                <div class="col-md-4">
+                  <div class="tvOuter">
+                    {% comment %} <img src="" alt="tv"> {% endcomment %}
+                    <h3 class="text-center">SEARCH FOR JOBS</h3>
+                  </div> 
+    
+                  <div class="jobCategories">
+                    <h4>TOP JOB CATEGORIES</h4>
+                  
+                  <div class="jobCategories_tittle">
+                    {% for category in categories %}
+                    <p><a href='#'>{{ category.category_title }}<a></p>
+                    {% endfor %}
+                  </div>
+                </div>
+                  <div class="jobCategories">
+                    <h4>TOP JOB TYPES</h4>
+                  <div class="jobCategories_tittle">
+                    {% for job_type in jobtype %}
+                    <p><a href='#'>{{ job_type.job_type_title }}</a></p>
+                    {% endfor %}
+                  </div>
+                </div>
+                  <div class="jobCategories">
+                    <h4>TOP JOB SKILLS</h4>
+                  <div class="jobCategories_tittle">
+                    {% for skill in skills %}
+                    <p><a href='#'>{{ skill.skill_title }}<a></p>
+                    {% endfor %}
+                  </div>
+                </div>
+                  
+    
+                  </div>
+                </div>
+              </div> 
+            </div>
+  
+            <div class="jbLocation_outer1">
+              <div class="jbLocation_outer">
+                <ul>
+                  <li><a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i>TOP JOB LOCATIONS</a></li>
+                  <li><a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i>TOP JOB TITLES</a></li>
+                  <li><a href="#"><i class="fa fa-building" aria-hidden="true"></i>TOP COMPANIES</a></li>
+                </ul>
+              </div>
+              <div class="row jobList"> 
+                <div class="col-md-3 jobListItem">
+                  <ul>
+                    <li><a href="#">Atlanta</a></li>
+                    <li><a href="#">Dallas</a></li>
+                    <li><a href="#">New York</a></li>
+                    <li><a href="#">Santa Ana/Anaheim</a></li>
+                    <li><a href="#">Wichta</a></li>
+                    <li><a href="#">Anchorage</a></li>
+                    <li><a href="#">Miami</a></li>
+                    <li><a href="#">Los Angeles</a></li>
+                  </ul>
+                </div>
+    
+                <div class="col-md-3 jobListItem">
+                  <ul>
+                    <li><a href="#">Atlanta</a></li>
+                    <li><a href="#">Dallas</a></li>
+                    <li><a href="#">New York</a></li>
+                    <li><a href="#">Santa Ana/Anaheim</a></li>
+                    <li><a href="#">Wichta</a></li>
+                    <li><a href="#">Anchorage</a></li>
+                    <li><a href="#">Miami</a></li>
+                    <li><a href="#">Los Angeles</a></li>
+                  </ul>
+                </div>
+    
+                <div class="col-md-3 jobListItem">
+                  <ul>
+                    <li><a href="#">Atlanta</a></li>
+                    <li><a href="#">Dallas</a></li>
+                    <li><a href="#">New York</a></li>
+                    <li><a href="#">Santa Ana/Anaheim</a></li>
+                    <li><a href="#">Wichta</a></li>
+                    <li><a href="#">Anchorage</a></li>
+                    <li><a href="#">Miami</a></li>
+                    <li><a href="#">Los Angeles</a></li>
+                  </ul>
+                </div>
+    
+                <div class="col-md-3 jobListItem">
+                  <ul>
+                    <li><a href="#">Atlanta</a></li>
+                    <li><a href="#">Dallas</a></li>
+                    <li><a href="#">New York</a></li>
+                    <li><a href="#">Santa Ana/Anaheim</a></li>
+                    <li><a href="#">Wichta</a></li>
+                    <li><a href="#">Anchorage</a></li>
+                    <li><a href="#">Miami</a></li>
+                    <li><a href="#">Los Angeles</a></li>
+                  </ul>
+                </div>
+    
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+      {% endif %}
+      {% endif %}
+      <!-- featured close here -->
+  
+      <!-- numbering start here -->
+      <section>
+        <div class="numberingOuter">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12 col-lg-3">
+                <div class="companiesNumbering">
+                  <div class="numberingIc">
+                    <i class="fa fa-building-o" aria-hidden="true"></i>
+                  </div>
+                  <div class="numberingHadding">
+                    <h4>2200+</h4>
+                    <p>COMPANIES</p>
+                  </div> 
+                </div>  
+              </div>
+              <div class="col-md-12 col-lg-3">
+                <div class="companiesNumbering">
+                  <div class="numberingIc">
+                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                  </div>
+                  <div class="numberingHadding">
+                    <h4>400K+</h4>
+                    <p>LIVE JOBS</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-3">
+                <div class="companiesNumbering">
+                  <div class="numberingIc">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                  </div>
+                  <div class="numberingHadding">
+                    <h4>3000+</h4>
+                    <p>RESUME</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-3">
+                <div class="companiesNumbering">
+                  <div class="numberingIc">
+                    <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                  </div>
+                  <div class="numberingHadding">
+                    <h4>2200+</h4>
+                    <p>RESOURCES</p>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+{% endblock %}

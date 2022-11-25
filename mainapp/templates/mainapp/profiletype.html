@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="" method="post">
+{% csrf_token %}
+<div id="profileouterdiv">
+    <legend><center><h2><b>What type of profile do you want</b></h2></center></legend><br>
+        <div class="text-center">
+            <select name="profiletype" id="selectprofile">
+                <option value="buyer">Freelancer</option>
+                <option value="seller">Client</option>
+            </select>  <br>
+            <button class="btn btn-primary" id="profilebuttonsave" type="submit">Save</button>
+        </div> 
+</div>
+</form>
+{% endblock %}

@@ -1,0 +1,320 @@
+{% load static %}
+{% load digibuddies_extras %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="421317074779-asalctbdbdse8ea6qceqf9jkd0e3etj9.apps.googleusercontent.com">
+    {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">  {% endcomment %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/bootstrapValidator.min.css' %}"> 
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'mainapp/css/style.css' %}">
+    <!-- font awsome -->
+    
+    {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" /> 
+    
+
+    <title>DigiBuddies</title>
+</head>
+<body>
+{% include 'header.html'%}
+    <!-- header css close here -->
+<section class="main_content">
+  <div class="container main_profile_description">
+    <div class="row">
+      <div class="col-lg-6 col-md-4 col-sm-4">
+        <div class="row user_prfile">
+          <a href="#">
+          <div class="col-lg-2 col-md-4">
+            <img src="{{ profile_picture.url }}" alt="">
+          </div>
+          <div class="col-lg-10 col-md-8">
+            <h3>{{user.first_name}} {{user.last_name}}</h3>
+          </div>
+        </a>
+        </div>
+        </div>
+         <div class="col-lg-6 col-md-8 col-sm-8 description_icons">
+         <div class="row">
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               
+               <p><a href="{% url 'chat-index' %}"><i class="fa fa-envelope"></i> <em>Messages</em></a></p>
+             </div>
+           </div>
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               <i class="fa fa-solid fa-eye"></i>
+               <p><a href="#">7000</a> <em>visits</em></p>
+             </div>
+           </div>
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               <i class="fa fa-square-o" aria-hidden="true"></i>
+               <p><a href="#">12</a> <em>Ads</em></p>
+             </div>
+           </div>
+           <div class="col-md-3 col-sm-3 col-3">
+             <div class="mail_descrption">
+               <i class="fa fa-user"></i>
+               <p><a href="#">18</a> <em>Favorites</em></p>
+             </div>
+           </div>
+         </div>
+      </div>
+      </div>
+    </div>
+
+ <div class="container content_description">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Hello {{user.first_name}} {{user.last_name}}</h3>
+         <div class="accordion profile_details" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                 My details 
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <form id='form-register'  class="justify-content-center"  method='post' enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {% if messages %}
+    
+                    {% for message in messages %}
+                    <div class="form-group">
+                      <div class="alert alert-success col-md-7 inputGroupContainer text-center" style="float:none; margin:auto;"
+                      role="alert">
+                        {{ message }}
+                      </div>
+                    </div>
+                    {% endfor %}
+                  {% endif %}
+                  <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender"  id="">
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Adress</label>
+                    {{ form.address }}
+                    {{ form.address.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>City</label>
+                    {{ form.city }}
+                    {{ form.city.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Country</label>
+                    {{ form.country }}
+                    {{ form.country.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>State</label>
+                    {{ form.state }}
+                    {{ form.state.errors }}
+                  </div>
+                  
+                     
+                  
+                  
+                  <div class="form-group">
+                    <label>Profile Description</label>
+                    {{ form.profile_desc }}
+                    {{ form.profile_desc.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Linkedin Profile</label>
+                    {{ form.linkedin_profile }}
+                    {{ form.linkedin_profile.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Github Profile</label>
+                    {{ form.github_profile }}
+                    {{ form.github_profile.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Profile Picture</label>
+                    <img id="buyer_old_profile" src="{{ profile_picture.url }}" alt="">
+                    {{ form.profile_picture }}
+                    {{ form.profile_picture.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Resume</label>
+                    {{ form.resume }}
+                    {{ form.resume.errors }}
+                  </div>
+                  <div class="form-group">
+                    <label>Long Description</label>
+                    {{ form.long_description }}
+                  </div>
+
+                  
+
+                  <div class="form-group">
+                    <label>Skills</label>
+                    <select class='selectpicker form-control' name="skills" id="skill_type" multiple data-live-search="true">
+                      {% for data in skills %}
+                        <option value="{{ data.skill_title }}" {% if data in selected_skills.all %} selected {% endif %}>{{ data.skill_title}}</option>
+                      {% endfor %}
+              
+                    </select>
+                  </div>
+                  <br>
+                  <form >
+                    <input name="skill_added_hide" id="skill_hide_input" placeholder="Add new skill" form='form'></input><input type='submit' id="skill_hide_add" name="skill_added" class='btn btn-success' value='Add' form='form'></input>
+                  </form>  
+
+                  <form method="post" id='form1'>
+                    {% csrf_token %}
+                    <input name="skill_added" id="skill_input" placeholder="Add new skill" form='form1'></input><input type='submit' id="skill_add" class='btn btn-success' value='Add' name="" form='form1'></input>
+                  </form>
+                  <br>
+                  <div class="form-group">
+                    {% comment %} <input type="submit" name="profile_update" class="update_btn" value='Update'></input> {% endcomment %}
+                    <input type="submit" class="btn btn-warning" name="profile_update" value="Save" form="form-register">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                 Settings 
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <form name="password_update" method="post">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="password" required value="">
+                      </div>
+                       <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm" required value="">
+                      </div>
+                      <div class="form-group">
+                        <button type="submit" name='pwd_upd' class="update_btn">Update</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+            {% comment %} ---------- {% endcomment %}
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                 Wallet 
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <table class="table">
+                      <thead>
+                          <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Payment Amount</th>
+                              <th scope="col" >Project</th>
+                              <th scope="col">Payment by</th>
+                              <th scope="col">Action</th>
+                              <th scope="col">Date or Time</th>
+
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for pay in payment_record %}
+                          <tr>
+                              <th scope="row">{{pay.id}}</th>
+                              <td>{{pay.amount}}</td>
+                              <td>{{pay.job}}</td>
+                              <td>{{pay.seller.company_name}}</td>
+                              {% if pay.paymentReport %}
+                              <td> Payement Received</td>
+                              {% else %}
+                              <td>Payement received Failed</td>
+                              {% endif %}
+                              <td>{{pay.date_time}}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% comment %} ---------- {% endcomment %}
+            
+       
+        </section>
+        <footer>
+          <div class="footerOuter">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="footer_Leftsec">
+                    <ul>
+                      <li><a href="#">HOME</a></li>
+                      <li><a href="#">ABOUT US</a></li>
+                      <li><a href="#">TEAMS AND CONDITIONS</a></li>
+                      <li><a href="#">PRIVACY POLICY</a></li>
+                      <li><a href="#">CONTACT US</a></li>
+                      <li><a href="#">FAQ</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="footer_Rightsec">
+                    <p>@ 2022 Digibuddies</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+        
+        <script src="https://use.fontawesome.com/b197abb434.js"></script> 
+            
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script> 
+        <script src="{% static 'mainapp/js/jquery.js' %}"></script>
+        <script src="{% static 'mainapp/js/jquery.min.js' %}"></script>
+        <script src="{% static 'mainapp/js/popper.js' %}"></script>
+        {% comment %} <script src="{% static 'mainapp/js/bootstrap.js' %}"></script>
+        <script src="{% static 'mainapp/js/bootstrap.min.js' %}"></script> {% endcomment %}
+        <script src="{% static 'mainapp/js/bootstrapvalidator.min.js' %}"></script>
+        <script src="{% static 'mainapp/js/bootstrap.bundle.min.js' %}"></script>
+        <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+        <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        {% comment %} {% include 'mainapp/ajax.html' %} {% endcomment %}
+         <script>
+          $('select').selectpicker();
+        
+        
+        </script>  
+        </body>
+        
+        </html>

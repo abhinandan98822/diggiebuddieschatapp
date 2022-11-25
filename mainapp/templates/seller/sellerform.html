@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 col-md-8" style="float:none;margin:auto;">
+<form action="" id='form-register' class="well form-horizontal"  method='POST' enctype='multipart/form-data'>
+    {% csrf_token %}
+
+<fieldset>
+
+<!-- Form Name -->
+<legend><center><h2><b>Client Profile</b></h2></center></legend><br>
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <p class='alert alert-danger'> {{ error }} </p>
+        {% endfor %}
+    {% endfor %}
+{% endif %} 
+<div class="fromGroup_outer">
+<!-- Text input-->
+
+  <div class="form-group">
+    <label class=" control-label">Company Name</label>  
+    <div class="inputGroupContainer">
+    <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    {{ form.company_name }}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class=" control-label">Company Logo</label>  
+    <div class="inputGroupContainer">
+    <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    {{ form.company_logo }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Text input-->
+  <div class="form-group">
+      <label class=" control-label">Company E-Mail</label>  
+        <div class="inputGroupContainer">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+      {{ form.company_email }}
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Text input-->
+
+  <div class="form-group">
+      <label class=" control-label" >Company Address</label> 
+        <div class="inputGroupContainer">
+        <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+      {{ form.company_address }}
+    
+        </div>
+      </div>
+    </div>
+
+  <div class="form-group">
+    <label class=" control-label" >Company Country</label> 
+      <div class="inputGroupContainer">
+      <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    {{ form.country_of_company }}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class=" control-label" >Company City</label> 
+    <div class="inputGroupContainer">
+    <div class="input-group">
+  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+  {{ form.city_of_company }}
+    </div>
+  </div>
+  </div>
+
+    <!-- Text input-->
+
+  <div class="form-group">
+      <label class=" control-label" >Company Phone Number</label> 
+        <div class="inputGroupContainer">
+        <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+      {{ form.company_phone_number }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-12 text-center control-label mb-4" >Company Description</label> 
+      <div class="col-md-12  inputGroupContainer" >
+        <div class="input-group justify-content-center"  >
+      {{ form.company_desc }}
+        </div>
+      </div>
+    </div>
+
+  <!-- Button -->
+  <div class="form-group">
+    <label class=" control-label"></label>
+    <div class=" col-md-12 text-center saveBtnSubmit_resiter ">
+      <button type="submit" class="btn btn-warning" >Save <span class="glyphicon glyphicon-send"></span></button>
+    </div>
+  </div>
+</div>
+
+</fieldset>
+</div>
+    </div>
+</form>
+</div>
+{% endblock %}
